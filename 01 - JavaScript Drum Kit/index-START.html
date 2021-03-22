@@ -64,16 +64,15 @@
     if (!audio) return;
     audio.play();
     audio.currentTime = 0;
-    key.classList.toggle('playing');
+    key.classList.add('playing');
   };
-  const removeTransition = (key) => {
-    console.log(key);
-    if (key.style !== 'transform') return;
-    key.currentTarget.classList.remove('playing');
+  const removeTransition = (event) => {
+    if (event.propertyName !== 'transform') return;
+    event.currentTarget.classList.remove('playing');
   };
 
   const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('transitioned', removeTransition(key)));
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
   window.addEventListener('keydown', (event) => {
     playSound(event);
