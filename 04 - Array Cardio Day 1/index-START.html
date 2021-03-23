@@ -34,31 +34,65 @@
       'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
       'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
     ];
-    
+
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const fifeteen = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year < 1600) ? true : false);
+    console.table(fifeteen);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const fullName = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+    console.table(fullName);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const oldest = inventors.sort((a,b) => (a.year > b.year) ? 1 : -1);
+    console.table(oldest);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    const totalAge = inventors.reduce((total, inventor) => {
+      return total + (inventor.passed - inventor.year);
+    }, 0);
+    console.log(totalAge);
 
     // 5. Sort the inventors by years lived
+    const longestLive = inventors.sort((a,b) => {
+      const aAge = (a.passed - a.year);
+      const bAge = (b.passed - b.year);
+      return (aAge > bAge) ? 1 : -1
+    });
+    console.table(longestLive);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+    // const category = document.querySelector('.mw-category');
+    // const item = Array.from(category.querySelectorAll('a'));
+    // const sector = item.map(sect => sect.textContent)
+    //                    .filter(word => word.includes('de') ? true : false);
+    // console.log(de);
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const lastName = people.sort((a,b) => {
+      const [aLast, aFirst] = a.split(', ');
+      const [bLast, bFirst] = b.split(', ');
+      return (aLast > bLast) ? 1 : -1;
+    });
+    console.table(lastName);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const counter = data.reduce((total, mode) => {
+      if (!total[mode]) {
+        total[mode] = 0;
+      }
+        total[mode]++;
+        return total;
+    }, {});
+    console.log(counter);
 
   </script>
 </body>
