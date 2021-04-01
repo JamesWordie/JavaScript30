@@ -43,6 +43,7 @@
   </div>
 
   <script>
+    // prevents the function running constantly, eg with event listener scroll
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -58,6 +59,34 @@
       };
     }
 
+    const images = document.querySelectorAll('.slide-in');
+
+    function checkSlide(event) {
+      // console.log(event);
+      images.forEach(image => {
+        // no. of pixels from the top scrolled down,
+        // .innerheight gives to bottom of viewport eg about foot/console etc.
+        // image height / 2 to give the middle of the image for when it appears
+        const slideInAt = (window.scrollY + window.innerHeight) -
+        image.height / 2;
+        // gives the distance from top of the screen to the bottom of the image
+        const imageBotton = image.offsetTop + image.height;
+        // to make sure the middle of image is greater than the top of the image
+        const isHalfShown = slideInAt > image.offsetTop;
+        console.log(isHalfShown)
+        // to check when scrolling througb is the image still visible or not
+        const isNotScrolledPast = window.scrollY < imageBotton;
+        console.log(isNotScrolledPast)
+        if (isHalfShown && isNotScrolledPast) {
+          image.classList.add('active');
+        } else {
+          image.classList.remove('active');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', debounce(checkSlide));
+
   </script>
 
   <style>
@@ -68,11 +97,11 @@
       font-size: 20px;
       font-weight: 200;
     }
-    
+
     body {
       margin: 0;
     }
-    
+
     *, *:before, *:after {
       box-sizing: inherit;
     }
@@ -107,7 +136,7 @@
     .align-left.slide-in {
       transform: translateX(-30%) scale(0.95);
     }
-    
+
     .align-right.slide-in {
       transform: translateX(30%) scale(0.95);
     }
