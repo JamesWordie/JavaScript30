@@ -23,6 +23,10 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <span>
+      <button class="clear">Clear List</button>
+      <button class='check'>Check/Uncheck All</button>
+    </span>
   </div>
 
 <script>
@@ -31,6 +35,10 @@
   // gets any items from localstorage to populate the list on the page
   const items = JSON.parse(localStorage.getItem('items')) || [];
 
+  const clearButton = document.querySelector('.clear');
+  const checkButton = document.querySelector('.check');
+
+
   // if nothing prevents js breaking
   // cleaner code as it means that I can reuse the fucntion again.
   function populateList(items = {}, platesList) {
@@ -38,7 +46,7 @@
         // ternary to apply checked class true or false fot item done value
       return `
         <li>
-        <input type="checkbox" data-index=${index} id='item${index}' ${item.done ? 'checked' : ''}>
+          <input type="checkbox" data-index=${index} id='item${index}' ${item.done ? 'checked' : ''}>
           <label htmlFor="item${index}">${item.text}</label>
         </li>
       `;
@@ -68,8 +76,14 @@
     if (event.target.matches('input')) return;
     const element = event.target;
     const index = element.dataset.index;
+    console.log(element.dataset);
     items[index].done = !items[index].done;
     localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  };
+
+  function clearList(event) {
+    localStorage.removeItem('items');
     populateList(items, itemsList);
   };
 
@@ -78,6 +92,7 @@
   // to load the items from localstorage and populate list
   populateList(items, itemsList);
   itemsList.addEventListener('click', toggleDone);
+  clearButton.addEventListener('click', clearList)
 </script>
 
 
