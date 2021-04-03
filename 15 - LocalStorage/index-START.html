@@ -28,7 +28,8 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  // gets any items from localstorage to populate the list on the page
+  const items = JSON.parse(localStorage.getItem('items')) || [];
 
   // if nothing prevents js breaking
   // cleaner code as it means that I can reuse the fucntion again.
@@ -58,11 +59,25 @@
     // empties the form, ie refrashes the page
     items.push(item);
     populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
     this.reset();
+  };
+
+  function toggleDone(event) {
+    // skip unless selected the correct area
+    if (event.target.matches('input')) return;
+    const element = event.target;
+    const index = element.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
   };
 
   // for any base of submission, enter, click, etc.
   addItems.addEventListener('submit', addItem);
+  // to load the items from localstorage and populate list
+  populateList(items, itemsList);
+  itemsList.addEventListener('click', toggleDone);
 </script>
 
 
