@@ -30,6 +30,39 @@
   const itemsList = document.querySelector('.plates');
   const items = [];
 
+  // if nothing prevents js breaking
+  // cleaner code as it means that I can reuse the fucntion again.
+  function populateList(items = {}, platesList) {
+    platesList.innerHTML = items.map((item, index) => {
+        // ternary to apply checked class true or false fot item done value
+      return `
+        <li>
+        <input type="checkbox" data-index=${index} id='item${index}' ${item.done ? 'checked' : ''}>
+          <label htmlFor="item${index}">${item.text}</label>
+        </li>
+      `;
+      // to make into a long string to add into html rather than lopping an array
+    }).join('');
+  };
+
+  function addItem(event) {
+    // to  stop the paeg reloading
+    event.preventDefault();
+    // this is the form, therefore works for selecting the user input
+    const text = (this.querySelector('[name=item]')).value;
+    const item = {
+      text: text,
+      // can just use text, ES6 shorthand
+      done: false
+    };
+    // empties the form, ie refrashes the page
+    items.push(item);
+    populateList(items, itemsList);
+    this.reset();
+  };
+
+  // for any base of submission, enter, click, etc.
+  addItems.addEventListener('submit', addItem);
 </script>
 
 
