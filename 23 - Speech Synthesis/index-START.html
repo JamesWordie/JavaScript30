@@ -31,10 +31,48 @@
 <script>
   const msg = new SpeechSynthesisUtterance();
   let voices = [];
-  const voicesDropdown = document.querySelector('[name="voice"]');
+  let voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  msg.text = document.querySelector('[name="text"]').value;
+
+  // populate the dropdown list of the builtin voices provided by the browswer
+  function populateVoices() {
+    voices = this.getVoices();
+    voicesDropdown .innerHTML = voices
+      .filter(voice => voice.lang.includes('en'))
+      .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+      .join('');
+  };
+
+  // set the voice language or person speaking
+  function setVoice() {
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggle();
+  };
+
+  // starting the speech or stopping the speech
+  function toggle(startOver = true) {
+    speechSynthesis.cancel();
+    if (startOver) {
+      speechSynthesis.speak(msg);
+    }
+  }
+
+  // set the option of the pitch, speed and text
+  function setOption() {
+    msg[this.name] = this.value;
+    toggle();
+  }
+
+  //event listeners for the page
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice);
+  options.forEach(option => option.addEventListener('change', setOption))
+  speakButton.addEventListener('click', toggle);
+  stopButton.addEventListener('click', () => toggle(false));
 </script>
 
 </body>
