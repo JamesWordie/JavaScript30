@@ -40,9 +40,25 @@
   }
 </style>
 
-<button></button>
+<button class='btn'>Hey</button>
 <script>
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
 
+  // with the e.stopPropogatino this stops the bubbling effect and only console logs the one you select
+  function logText(e) {
+    // console.log(e)
+    // e.stopPropagation();
+    console.log(this.classList.value)
+  };
+
+  // when capture is set to false (default) when you click on element ie div 3 it ripples back up 'tree' capturing 2 and 1 also
+  // by setting to true, then it reverses it, ie it bubbles down the list from 1,2 to 3 the one you click,
+  //
+  divs.forEach(div => div.addEventListener('click', logText, { capture: true }))
+
+  // by setting once true on the event listener then it only allows for the click to be triggered once
+  button.addEventListener('click', logText, { once: true })
 </script>
 </body>
 </html>
